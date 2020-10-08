@@ -24,11 +24,11 @@ class Message extends Model
 
     public function sender()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'id');
     }
 
     public function receiver()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'id');
     }
 }

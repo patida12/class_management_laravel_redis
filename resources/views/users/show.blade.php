@@ -13,11 +13,9 @@
                             {{$user->fullname}}
                         </h2>
                         <div class="mt-2">
-                            <a href="/messagebox">
-                                <button class="btn btn-sm btn-info">
-                                    Send message
-                                  </button>
-                            </a>
+                        <a href="/messagebox/{{Auth::user()->id}}/{{$user->id}}">
+                            <button type="submit" class="btn btn-primary">Send message</button>
+                        </a>
                         </div>
                     </div>
                 </div>

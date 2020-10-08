@@ -62,10 +62,8 @@ Route::get('/challenges/delete/{id}', [ChallengeController::class, 'destroy']);
 Route::post('/challenges/answer/{id}', [ChallengeController::class, 'answer']);
 Route::get('/challenges/result', [ChallengeController::class, 'result']);
 
-Route::get('/messagebox', [MessageController::class, 'index']);
-Route::get('/messagebox/send/{id}', [MessageController::class, 'create']);
-Route::post('/messagebox/store', [MessageController::class, 'store']);
-Route::get('/messagebox/edit/{id}', [MessageController::class, 'edit']);
+Route::get('/messagebox/{sender_id}/{receiver_id}', [MessageController::class, 'index']);
+Route::post('/messagebox/send', [MessageController::class, 'store']);
 Route::post('/messagebox/update/{id}', [MessageController::class, 'update']);
 Route::get('/messagebox/delete/{id}', [MessageController::class, 'destroy']);
 

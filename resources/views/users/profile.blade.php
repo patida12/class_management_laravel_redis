@@ -2,6 +2,12 @@
 @section('content')
 <section>
 <div class="tab-content" style="margin-right: 15%;">
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show w-50" role="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="card">
       <div class="card-body">
         <div class="e-profile">
@@ -11,27 +17,23 @@
                 <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{$user->username}}</h4>
                 <div class="mt-2">
                 <i class="fa fa-inbox fa-2x btn" data-toggle='modal' data-target='#myModal'></i>
-                <span class="badge">{{'count'}}</span>
+                <span class="badge">{{$count}}</span>
                 <div class="modal" id="myModal">
                   <div class="modal-dialog">
                   <div class="modal-content">
-
                       <div class="modal-header" style="background-color: blue; color: white;">
                       <h4 class="modal-title">Inbox</h4>
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
-
                       <div class="modal-body">
-
-{{--
-                                <form action="sendMess.php" id="form_upload" method="POST">
-                                    <input type="hidden" name="idSender" style="margin-top: 1%; margin-bottom: 1%;" value="{{$user->id}}" />
-                                    <input type="hidden" name="idReceiver" style="margin-top: 1%; margin-bottom: 1%;" value="{{$idSender}}" />
-                                    <input type="hidden" name="nameReceiver" style="margin-top: 1%; margin-bottom: 1%;" value="{{$sender}}" />
-                                    <input type="submit" name="submit" value="Read" class="btn btn-primary btn-sm"><br>
-                                </form>
-                              </div> --}}
-
+                        @foreach ($newMessages as $message)
+                            <div class="row justify-content-center" style="font-size: 30px;">
+                                <strong>{{App\Models\User::find($message->sender_id)->fullname}}</strong><span style="color: red;">({{$message->count}})</span>
+                                <a href="/messagebox/{{Auth::user()->id}}/{{$message->sender_id}}">
+                                    <button type="submit" class="btn btn-primary">Read</button>
+                                </a>
+                                </div>
+                        @endforeach
                       </div>
                   </div>
                   </div>
@@ -109,17 +111,6 @@
                   </div>
                 </div>
               </div>
-              {{-- <div class="col">
-                  <div class="form-group">
-                    <input type="hidden" name="id" value="{{$user->id}}" />
-                  </div>
-                  <div class="form-group">
-                    <input type="hidden" name="fullname" value="{{$user->fullname}}" />
-                  </div>
-                  <div class="form-group">
-                    <input type="hidden" name="username" value="{{$user->username}}" />
-                  </div>
-              </div> --}}
             </div>
             <div class="row">
               <div class="col d-flex justify-content-end">
@@ -127,7 +118,7 @@
               </div>
             </div>
           </form>
-        </div><a href="/home"><button class="btn btn-primary">Back</button></a>
+        </div>
       </div>
     </div>
   </div>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -70,7 +72,7 @@ class UserController extends Controller
         $user->phonenumber = $request->phonenumber;
         $user->save();
 
-        return redirect()->action([UserController::class, 'getAllStudents']);
+        return redirect()->action([UserController::class, 'getAllStudents'])->with('success_add', 'Add thành công!');
     }
 
     /**
@@ -83,10 +85,28 @@ class UserController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::find($id);
-        return view(
-            'users.profile',
-            ['user' => $user]
+        $count = DB::select(
+            'SELECT COUNT(isread) as count FROM messages WHERE isread=false AND receiver_id=? GROUP BY isread',
+            [$id]
         );
+
+        $newMessages = DB::select(
+            'SELECT sender_id, COUNT(isread) as count FROM messages WHERE isread=false AND receiver_id=? GROUP BY sender_id',
+            [$id]
+        );
+
+        if (count($count)) {
+            return view(
+                'users.profile',
+                ['user' => $user, 'count' => $count[0]->count, 'newMessages' => $newMessages]
+            );
+        }
+        else {
+            return view(
+                'users.profile',
+                ['user' => $user, 'count' => count($count), 'newMessages' => $newMessages]
+            );
+        }
     }
 
     /**
@@ -156,12 +176,14 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'phonenumber' => ['string', 'max:255'],
         ]);
-
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->phonenumber = $request->phonenumber;
         $user->password = Hash::make($request->password);
         $user->fullname = $request->fullname;
         $user->save();
 
-        return redirect()->action([UserController::class, 'getAllStudents']);
+        return redirect()->action([UserController::class, 'getAllStudents'])->with('success_update', 'Update thành công!');
     }
 
     /**
@@ -194,11 +216,12 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'phonenumber' => ['string', 'max:255'],
         ]);
-
+        $user->email = $request->email;
+        $user->phonenumber = $request->phonenumber;
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return redirect()->action([UserController::class, 'getProfile']);
+        return redirect()->action([UserController::class, 'getProfile'])->with('success', 'Update thành công!');
     }
 
     /**
@@ -212,6 +235,6 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        return redirect()->action([UserController::class, 'getAllStudents']);
+        return redirect()->action([UserController::class, 'getAllStudents'])->with('success_delete', 'Delete thành công!');
     }
 }

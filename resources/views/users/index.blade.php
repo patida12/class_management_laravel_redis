@@ -2,11 +2,26 @@
 @section('content')
 <section>
     <div class="tab-content">
+        @if (session('success_delete'))
+        <div class="alert alert-success alert-dismissible fade show w-50" role="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ session('success_delete') }}
+        </div>
+        @endif
+        @if (session('success_update'))
+            <div class="alert alert-success alert-dismissible fade show w-50" role="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ session('success_update') }}
+            </div>
+        @endif
+        @if (session('success_add'))
+            <div class="alert alert-success alert-dismissible fade show w-50" role="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ session('success_add') }}
+            </div>
+        @endif
         <div style="margin-bottom: 10px;">
             <div class="col-sm-12">
-                {{-- <a style="color: white; margin-left: -14px;" href="addStudent.php">
-                    <button class="btn btn-primary">Add new</button>
-                </a> --}}
                 <form action="/students/create" method="get" style="margin-left: -14px;">
                     <button type="submit" class="btn btn-primary">
                          Add Student

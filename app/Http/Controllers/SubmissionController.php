@@ -64,16 +64,20 @@ class SubmissionController extends Controller
             $path = Storage::putFileAs('public/submission', $file, $id . "_" . $submission->user_id . "_" . $submission->name);
 
             if ($path) {
-                return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])->with('success_upload', 'Upload thành công!');
+                return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])
+                                    ->with('success_upload', 'Upload thành công!');
             }
-            return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])->with('error_upload', 'Upload failt!');
+            return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])
+                                    ->with('error_upload', 'Upload failt!');
         }
         $path = Storage::putFileAs('public/submission', $file, $id . "_" . $submission->user_id . "_" . $submission->name);
 
         if ($path) {
-            return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])->with('success_upload', 'Đã update file thành công!');
+            return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])
+                            ->with('success_upload', 'Đã update file thành công!');
         }
-        return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])->with('error_upload', 'Update file failt!');
+        return redirect()->action([SubmissionController::class, 'index'], ['id' => $id])
+                            ->with('error_upload', 'Update file failt!');
     }
 
     /**
