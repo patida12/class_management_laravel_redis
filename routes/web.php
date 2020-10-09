@@ -24,7 +24,7 @@ use App\Http\Controllers\MessageController;
 
 Auth::routes();
 
-Route::view('/', 'index');
+Route::get('/', [LoginController::class, 'getLogin']);
 
 Route::get('/login', [LoginController::class, 'getLogin']);
 Route::post('/authenticate', [LoginController::class, 'authenticate']);

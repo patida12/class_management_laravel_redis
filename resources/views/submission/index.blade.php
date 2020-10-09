@@ -15,7 +15,7 @@
                 {{ session('success_upload') }}
             </div>
         @endif
-
+        @if(!Auth::user()->isTeacher())
         <div style="margin-bottom: 10px;">
             <div class="col-sm-12">
             <form action="/submission/create/{{$assignment->id}}" method="get" style="margin-left: -14px;">
@@ -25,7 +25,9 @@
                 </form>
             </div>
         </div>
+        @endif
 
+        @if(Auth::user()->isTeacher())
         <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table id="table" class="table table-hover table-bordered table-striped table-inverse table-wrapper-scroll-y" cellspacing="0">
                 <thead class="thead-inverse">
@@ -56,6 +58,7 @@
                 </tbody>
             </table>
         </div>
+        @endif
         <a class="btn btn-danger" href='/assignment'>Back</a>
     </div>
 </section>

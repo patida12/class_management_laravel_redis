@@ -20,6 +20,8 @@
                 {{ session('success_add') }}
             </div>
         @endif
+
+        @if(Auth::user()->isTeacher())
         <div style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <form action="/students/create" method="get" style="margin-left: -14px;">
@@ -29,6 +31,7 @@
                 </form>
             </div>
         </div>
+        @endif
 
         <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table id="table" class="table table-hover table-bordered table-striped table-inverse table-wrapper-scroll-y" cellspacing="0">
@@ -52,6 +55,7 @@
                                 Show
                               </button>
                         </a>
+                        @if(Auth::user()->isTeacher())
                         <a href="/students/edit/{{$user->id}}">
                             <button class="btn btn-sm btn-warning">
                                 Edit
@@ -62,6 +66,7 @@
                             Delete
                           </button>
                         </a>
+                        @endif
                       </td>
                     </tr>
                     @endforeach

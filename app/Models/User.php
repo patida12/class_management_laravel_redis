@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Message', 'sender_id');
     }
+
+    public function isTeacher()
+    {
+        return ($this->permission === 1);
+    }
 }

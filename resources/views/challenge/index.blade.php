@@ -8,7 +8,7 @@
                 {{ session('success_delete') }}
             </div>
         @endif
-
+        @if(Auth::user()->isTeacher())
         <div style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <form action="/challenges/create" method="get" style="margin-left: -14px;">
@@ -18,6 +18,7 @@
                 </form>
             </div>
         </div>
+        @endif
 
         <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table id="table" class="table table-hover table-bordered table-striped table-inverse table-wrapper-scroll-y" cellspacing="0">
@@ -68,11 +69,13 @@
                                     </div>
                                     </div>
                                 </div>
+                        @if(Auth::user()->isTeacher())
                         <a href="/challenges/delete/{{$challenge->id}}" method="post">
                           <button onclick="return confirm('Do you want to delete this challenge?')" class="btn btn-danger btn-sm">
                             Delete
                           </button>
                         </a>
+                        @endif
                       </td>
                     </tr>
                     @endforeach

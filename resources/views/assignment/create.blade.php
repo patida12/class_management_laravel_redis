@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
 <div class="tab-content">
+@if(Auth::user()->isTeacher())
 <div class="row" style="margin-left: 10%">
     <div class="col-md-8">
         <div class="card">
@@ -23,5 +24,8 @@
         </div>
     </div>
 </div>
+@else
+<h2>You don't have permisson!</h2>
+@endif
 </div>
 @endsection
