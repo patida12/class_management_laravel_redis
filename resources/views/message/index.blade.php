@@ -8,12 +8,12 @@
             {{$message->message}}
             <strong> :{{$sender->fullname}}<i class='fa fa-user-circle'></i></strong>
             <br>
-            <span class="time-right">{{$message->created_at}}</span>
+            <span class="time-right">{{$message->updated_at}}</span>
             </div>
-            <div id="mess{{$message->id}}" class="collapse" style="float:right; margin: 10px 0;">
+            <div id="mess{{$message->id}}" class="collapse" style="float:right;">
             <button class="btn btn-warning btn-sm" data-toggle="collapse" data-target="#edit{{$message->id}}">Edit</button>
 
-            <form action="/messagebox/update/{{$message->id}}" method="POST" id="edit{{$message->id}}" class="collapse">
+            <form action="/messagebox/update/{{$message->id}}" method="POST" id="edit{{$message->id}}" class="collapse position-absolute">
                 @csrf
                 <input type="hidden" name="sender_id" value="{{$sender->id}}" />
                 <input type="hidden" name="receiver_id" value="{{$receiver->id}}" />
@@ -31,7 +31,7 @@
             <div class="container receive">
             <strong><i class='fa fa-user-circle'>{{$receiver->fullname}}</i></strong>: {{$message->message}}
             <br>
-            <span class="time-left">{{$message->created_at}}</span>
+            <span class="time-left">{{$message->updated_at}}</span>
             </div>
             <br>
         @endif
