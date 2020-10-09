@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -22,6 +21,9 @@ class LoginController extends Controller
 
     public function getLogin()
     {
+        if (Auth::check()) {
+            return redirect('/home');
+        }
         return view('auth.login');
     }
 
@@ -34,7 +36,7 @@ class LoginController extends Controller
             return redirect()->intended('/home');
         } else
         {
-            return redirect()->action([LoginController::class,'getLogin']);
+            return redirect()->action([LoginController::class,'getLogin'])->with('error', 'Username or password is incorrect!');
         }
     }
 

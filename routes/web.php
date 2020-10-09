@@ -24,8 +24,8 @@ use App\Http\Controllers\MessageController;
 
 Auth::routes();
 
-Route::get('/', [LoginController::class, 'getLogin']);
-
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/login', [LoginController::class, 'getLogin']);
 Route::post('/authenticate', [LoginController::class, 'authenticate']);
 Route::get('/logout', [LoginController::class, 'logout']);
@@ -34,7 +34,7 @@ Route::get('/users/show/{id}', [UserController::class, 'show']);
 Route::get('/users/profile', [UserController::class, 'getProfile']);
 Route::post('/users/updateProfile', [UserController::class, 'updateProfile']);
 
-Route::get('/students', [UserController::class, 'getAllStudents'])->middleware('auth');
+Route::get('/students', [UserController::class, 'getAllStudents']);
 Route::get('/students/create', [UserController::class, 'create']);
 Route::post('/students/store', [UserController::class, 'store']);
 Route::get('/students/edit/{id}', [UserController::class, 'edit']);
@@ -67,4 +67,4 @@ Route::post('/messagebox/send', [MessageController::class, 'store']);
 Route::post('/messagebox/update/{id}', [MessageController::class, 'update']);
 Route::get('/messagebox/delete/{id}', [MessageController::class, 'destroy']);
 
-Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
+

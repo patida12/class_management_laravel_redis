@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Storage;
 class ChallengeController extends Controller
 {
     public const CHALLENGE_DIR = 'public/challenge';
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *

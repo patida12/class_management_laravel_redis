@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\Controllers\Auth\LoginController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -14,10 +15,13 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    public function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return redirect()->action([LoginController::class,'getLogin']);
-        }
+        // if (! Auth::check()) {
+        //     // dd("chua login");
+        //     return redirect('/login');
+        //     // return redirect()->action([LoginController::class,'getLogin']);
+        // }
+        return action([LoginController::class,'getLogin']);
     }
 }
