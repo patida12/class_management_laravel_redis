@@ -22,7 +22,7 @@ Vue.use(Vuex)
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chat-layout', require('./components/ChatLayout.vue').default);
 import { store } from './store/store.js';
 import axios from 'axios';
@@ -35,19 +35,19 @@ import axios from 'axios';
 
 const app = new Vue({
     el: '#app',
-    data: {
-        currentUserLogin: {}
-    },
-    store: store,
-    created() {
-        this.getCurrentUserLogin()
-    },
-    methods: {
-        getCurrentUserLogin() {
-            axios.get('/current-user')
-            .then(response => {
-                this.currentUserLogin = response.data
-            })
-        }
-    },
+    // data: {
+    //     currentUserLogin: {}
+    // },
+    // store: store,
+    // created() {
+    //     this.getCurrentUserLogin()
+    // },
+    // methods: {
+    //     getCurrentUserLogin() {
+    //         axios.get('/current-user')
+    //         .then(response => {
+    //             this.currentUserLogin = response.data
+    //         })
+    //     }
+    // },
 });

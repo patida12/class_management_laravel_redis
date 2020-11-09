@@ -1,0 +1,164 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
+@import url(https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css);
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css);
+@import url(https://use.fontawesome.com/releases/v5.6.3/css/all.css);
+/*!
+ * Bootstrap v4.5.2 (https://getbootstrap.com/)
+ * Copyright 2011-2020 The Bootstrap Authors
+ * Copyright 2011-2020 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+
+* {
+  box-sizing: border-box;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+body {
+  font-size: 16px;
+}
+
+header {
+  background-color: green;
+  padding: 10px;
+  text-align: left;
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#ul_index {
+  list-style-type: none;
+  font-size: 1.25em;
+  margin-top: 30px;
+  padding: 0;
+  width: 15%;
+  background-color: rgb(160, 154, 154);
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+#ul_index a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+
+#ul_index a:hover:not(.active){
+  background-color: #555;
+  color: white;
+  width: 100%;
+}
+.active{
+  color: white !important;
+  background-color: #555;
+
+  width: 100%;
+}
+
+.tab-content  {
+  padding-left: 20%;
+  margin-top: 3%;
+}
+
+@media screen and (max-width: 700px) {
+  #ul_index{
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  #ul_index a {float: left;}
+  #table {
+    left: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #ul_index a {
+    text-align: center;
+    float: none;
+  }
+  #table {
+    width: 80%;
+  }
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  width: 80%;
+  height: 700px;
+  overflow: auto;
+  }
+
+.table {
+  background-color: white;
+}
+
+th, td {
+  text-align: center;
+}
+
+.mbox {
+  margin: 0 auto;
+  margin-left: 8%;
+  padding: 0 10px;
+}
+
+.receive {
+  background-color: #E4E6EB;
+  color: black;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.send {
+  background-color: #0084FF;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: right;
+}
+
+.box-message {
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: right;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.time-right {
+  float: right;
+  color: white;
+}
+
+.time-left {
+  float: left;
+  color: black;
+}
+.badge {
+  position: absolute;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}

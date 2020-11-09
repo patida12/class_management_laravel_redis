@@ -36,14 +36,14 @@
 
         created() {
             this.loadMessage()
-            Echo.channel('chatroom')
+            Echo.channel('Laravel_chatroom')
             .listen('MessagePosted', (data) => {
                 console.log(data)
-                if (data.to_user.id == this.$root.currentUserLogin.id) {
+                //if (data.user.id == this.$root.currentUserLogin.id) {
                     let message = data.message
                     message.user = data.user
                     this.list_messages.push(message)
-                }
+                //}
             })
         },
 

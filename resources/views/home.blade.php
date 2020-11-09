@@ -35,6 +35,21 @@
 	<div id="app">
 		<chat-layout></chat-layout>
 	</div>
-	<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
+{{--
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <title>Laravel</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" type="text/css" href="../css/app.css">
+</head>
+<body>
+<div id="app">
+    <example-component></example-component>
+</div>
+<script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
+</body>
+</html> --}}

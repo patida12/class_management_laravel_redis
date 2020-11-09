@@ -82,10 +82,10 @@ class UserController extends Controller
     /**
      * Display the current user.
      *
-     * @param  int  $id
+     * @param
      * @return \Illuminate\Http\Response
      */
-    public function currentUser($id)
+    public function currentUser()
     {
         $user = Auth::user();
         return $user;

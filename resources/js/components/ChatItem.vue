@@ -2,7 +2,7 @@
     <div class="chat-item">
         <div class="chat-item-container">
             <span class="message-time">{{ list.created_at }}</span>
-            <span class="user-name">{{ list.user.name }}</span>
+            <span class="user-name">{{ list.user.username }}</span>
             <span class="message-text">{{ list.message }}</span>
         </div>
     </div>
