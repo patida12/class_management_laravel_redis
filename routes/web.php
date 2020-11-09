@@ -67,4 +67,12 @@ Route::post('/messagebox/send', [MessageController::class, 'store']);
 Route::post('/messagebox/update/{id}', [MessageController::class, 'update']);
 Route::get('/messagebox/delete/{id}', [MessageController::class, 'destroy']);
 
+Route::get('/messages', [MessageController::class, 'index']);
+
+//insert chat content vào trong database
+Route::post('/messages', [MessageController::class, 'store']);
+
+//lấy ra user hiện tại
+Route::get('/current-user', [UserController::class, 'currentUser']);
+
 

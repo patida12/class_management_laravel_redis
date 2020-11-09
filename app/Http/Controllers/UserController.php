@@ -25,7 +25,7 @@ class UserController extends Controller
         $users = User::where('permission', 0)->get();
         return view(
             'users.index',
-            ['users' => $users]
+            ['users' => $users, 'isListTeacher' => false]
         );
     }
 
@@ -39,7 +39,7 @@ class UserController extends Controller
         $users = User::where('permission', 1)->get();
         return view(
             'users.index',
-            ['users' => $users]
+            ['users' => $users, 'isListTeacher' => true]
         );
     }
 
@@ -80,6 +80,18 @@ class UserController extends Controller
     }
 
     /**
+     * Display the current user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function currentUser($id)
+    {
+        $user = Auth::user();
+        return $user;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -89,28 +101,11 @@ class UserController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::find($id);
-        $count = DB::select(
-            'SELECT COUNT(isread) as count FROM messages WHERE isread=false AND receiver_id=? GROUP BY isread',
-            [$id]
-        );
 
-        $newMessages = DB::select(
-            'SELECT sender_id, COUNT(isread) as count FROM messages WHERE isread=false AND receiver_id=? GROUP BY sender_id',
-            [$id]
+        return view(
+            'users.profile',
+            ['user' => $user]
         );
-
-        if (count($count)) {
-            return view(
-                'users.profile',
-                ['user' => $user, 'count' => $count[0]->count, 'newMessages' => $newMessages]
-            );
-        }
-        else {
-            return view(
-                'users.profile',
-                ['user' => $user, 'count' => count($count), 'newMessages' => $newMessages]
-            );
-        }
     }
 
     /**
@@ -187,7 +182,13 @@ class UserController extends Controller
         $user->fullname = $request->fullname;
         $user->save();
 
-        return redirect()->action([UserController::class, 'getAllStudents'])->with('success_update', 'Update thành công!');
+        if ($user->permission != 0) {
+            $url = 'getAllTeachers';
+        }
+        else {
+            $url = 'getAllStudents';
+        }
+        return redirect()->action([UserController::class, $url])->with('success_update', 'Update thành công!');
     }
 
     /**
