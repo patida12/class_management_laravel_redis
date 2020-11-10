@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Chat App</title>
+	<title>Class Management</title>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 	<style type="text/css">
@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div id="app">
-		<chat-layout></chat-layout>
+        <chat-layout></chat-layout>
     </div>
 	<script src="{{ mix('js/app.js') }}"></script>
 </body>

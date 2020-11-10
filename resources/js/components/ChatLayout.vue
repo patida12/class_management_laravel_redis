@@ -1,8 +1,14 @@
 <template>
 	<div>
+
         <div class="chat">
+
             <div class="chat-title">
-                <h1>Chatroom</h1>
+                <h1>Chatroom
+                <a href='/home' style="float: right;">
+                <button class="btn btn-primary" type="button">Back</button>
+                </a>
+                </h1>
             </div>
             <div class="messages">
                 <div class="messages-content">

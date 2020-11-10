@@ -1966,6 +1966,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -47104,7 +47110,16 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "chat-title" }, [
-      _c("h1", [_vm._v("Chatroom")])
+      _c("h1", [
+        _vm._v("Chatroom\n                "),
+        _c("a", { staticStyle: { float: "right" }, attrs: { href: "/home" } }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "button" } },
+            [_vm._v("Back")]
+          )
+        ])
+      ])
     ])
   }
 ]
