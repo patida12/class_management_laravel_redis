@@ -14,12 +14,7 @@ class MessageController extends Controller
 {
     public function index()
     {
-        // if ($messages = Redis::get('messages.all')) {
-        //     return json_decode($messages);
-        // }
-        $message = Message::with('user')->get();
-        //Redis::set('messages.all', $messages);
-
+        $message = Message::with('user')->latest()->paginate(50);;
         return $message;
     }
 

@@ -4,7 +4,7 @@
         <div class="chat">
 
             <div class="chat-title">
-                <h1>Chatroom
+                <h1>Chat room
                 <a href='/home' style="float: right;">
                 <button class="btn btn-primary" type="button">Back</button>
                 </a>
@@ -12,6 +12,14 @@
             </div>
             <div class="messages">
                 <div class="messages-content">
+                    <div class="text-center py-2" v-if="isLoading">
+                        <svg
+                            version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                            <path fill="#FF6700" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z" transform="rotate(18.3216 25 25)">
+                                <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform>
+                            </path>
+                        </svg>
+                    </div>
                     <ChatItem v-for="(message, index) in list_messages" :key="index" :message="message"></ChatItem>
                 </div>
             </div>
@@ -33,42 +41,85 @@ export default {
     data() {
         return {
             message: '',
-            list_messages: []
+            list_messages: [],
+            currentPage: 1,
+            newMessageArrived: 0, // number of new messages we just got (use for scroll)
+            lastPage: 1,
+            isLoading: false,
         }
     },
     created () {
-        this.loadMessage()
+        this.loadMessage(this.currentPage)
 
         Echo.channel('laravel_database_chatroom')
         .listen('MessagePosted', (data) => {
             let message = data.message
             message.user = data.user
             this.list_messages.push(message)
+            this.scrollToBottom()
         })
     },
+    mounted () {
+            $('.messages').on('scroll', async () => {
+                var scroll = $('.messages').scrollTop();
+                if (scroll < 1 && this.currentPage < this.lastPage) {
+                    await this.loadMessage(this.currentPage + 1)
+                    const lastFirstMessage = $(`.message:nth-child(${this.newMessageArrived - 1})`)
+                    $('.messages').scrollTop(lastFirstMessage.position().top)
+                }
+            })
+        },
     methods: {
-        loadMessage() {
-                axios.get('/messages')
-                    .then(response => {
-                        this.list_messages = response.data
+            async loadMessage(page) {
+                try {
+                    this.isLoading = true
+                    const response = await axios.get(`/messages?page=${page}`)
+
+                    this.list_messages = [...response.data.data.reverse(), ...this.list_messages]
+                    this.currentPage = response.data.current_page
+                    this.lastPage = response.data.last_page
+                    this.newMessageArrived = response.data.data.length
+                    this.$nextTick(() => {
+                        if (page === 1) {
+                            this.scrollToBottom()
+                        }
+                        $(() => {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        })
                     })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                } catch (error) {
+                    console.log(error)
+                } finally {
+                    this.isLoading = false
+                }
+
             },
-            sendMessage() {
-                axios.post('/messages', {
+            scrollToBottom () {
+                const container = document.querySelector('.messages')
+                if (container) {
+                    $(container).animate(
+                        { scrollTop: container.scrollHeight},
+                        { duration: 'medium', easing: 'swing' }
+                    )
+                }
+            },
+            async sendMessage() {
+                try {
+                    const response = await axios.post('/messages', {
                         message: this.message
                     })
-                    .then(response => {
-                        console.log('success')
-                        this.list_messages.push(response.data.message)
-                        this.message = ''
+                    this.list_messages.push(response.data.message)
+                    this.message = ''
+                    this.$nextTick(() => {
+                        this.scrollToBottom()
+                        $(() => {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        })
                     })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
     }
 }
 </script>
@@ -89,7 +140,6 @@ Body
 	top: 0;
 	left: 0;
 	z-index: 1;
-	background: url('https://images.unsplash.com/photo-1451186859696-371d9477be93?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925') no-repeat 0 0;
 	filter: blur(80px);
 	transform: scale(1.2);
 }
@@ -101,13 +151,13 @@ Chat
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
+    width: 800px;
     height: 80vh;
     max-height: 700px;
     z-index: 2;
     overflow: hidden;
     box-shadow: 0 5px 30px rgba(0, 0, 0, .2);
-    background: rgba(0, 0, 0, .5);
+    background: white;
     border-radius: 20px;
     display: flex;
     justify-content: space-between;
@@ -120,10 +170,10 @@ Chat Title
     flex: 0 1 45px;
     position: relative;
     z-index: 2;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(38, 38, 236);
     color: #fff;
     text-transform: uppercase;
-    text-align: left;
+    text-align: center;
     padding: 10px 10px 10px 50px;
 
     h1, h2 {
@@ -167,16 +217,17 @@ Message Box
     position: relative;
 
     & .message-input {
-        background: none;
+        background-color: white;
         border: none;
         outline: none!important;
         resize: none;
-        color: rgba(255, 255, 255, .7);
-        font-size: 11px;
-        height: 17px;
+        color: black;
+        font-size: 16px;
         margin: 0;
         padding-right: 20px;
-        width: 265px;
+        height: 35px;
+        width: 720px;
+        border-radius: 20px;
     }
     textarea:focus:-webkit-placeholder{
         color: transparent;
@@ -185,11 +236,11 @@ Message Box
     & .message-submit {
         position: absolute;
         z-index: 1;
-        top: 9px;
+        top: 16px;
         right: 10px;
         color: #fff;
         border: none;
-        background: #248A52;
+        background: green;
         font-size: 10px;
         text-transform: uppercase;
         line-height: 1;
