@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessagePosted;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,6 +11,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\MessageController;
+use App\Models\Message;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,3 +70,10 @@ Route::post('/messagebox/update/{id}', [MessageController::class, 'update']);
 Route::get('/messagebox/delete/{id}', [MessageController::class, 'destroy']);
 
 
+
+Route::get('/getUserLogin', function() {
+	return Auth::user();
+});
+Route::view('/chat', 'chat');
+Route::get('/messages', [MessageController::class, 'index']);
+Route::post('/messages', [MessageController::class, 'store']);

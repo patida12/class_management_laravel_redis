@@ -40,13 +40,22 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Submission');
     }
 
-    public function messages()
-    {
-        return $this->hasMany('App\Models\Message', 'sender_id');
+    public function message() {
+        return $this->hasMany(Message::class);
     }
 
     public function isTeacher()
     {
         return ($this->permission === 1);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function get()
+    {
+        return $this;
     }
 }

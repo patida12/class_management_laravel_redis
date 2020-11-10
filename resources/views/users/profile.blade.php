@@ -15,30 +15,7 @@
             <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
               <div class="text-center text-sm-left mb-2 mb-sm-0">
                 <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{$user->username}}</h4>
-                <div class="mt-2">
-                <i class="fa fa-inbox fa-2x btn" data-toggle='modal' data-target='#myModal'></i>
-                <span class="badge">{{$count}}</span>
-                <div class="modal" id="myModal">
-                  <div class="modal-dialog">
-                  <div class="modal-content">
-                      <div class="modal-header" style="background-color: blue; color: white;">
-                      <h4 class="modal-title">Inbox</h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      </div>
-                      <div class="modal-body">
-                        @foreach ($newMessages as $message)
-                            <div class="row justify-content-center" style="font-size: 30px;">
-                                <strong>{{App\Models\User::find($message->sender_id)->fullname}}</strong><span style="color: red;">({{$message->count}})</span>
-                                <a href="/messagebox/{{Auth::user()->id}}/{{$message->sender_id}}">
-                                    <button type="submit" class="btn btn-primary">Read</button>
-                                </a>
-                                </div>
-                        @endforeach
-                      </div>
-                  </div>
-                  </div>
-              </div>
-                </div>
+
                 <div class="mt-4">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf

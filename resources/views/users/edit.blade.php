@@ -5,7 +5,7 @@
 <div class="row" style="margin-left: 10%">
     <div class="col-md-8">
         <div class="card">
-            <h3 class="card-header bg-primary text-center" style="color: white">{{ __('Edit Student') }}</h3>
+            <h3 class="card-header bg-primary text-center" style="color: white">{{ __('Edit User') }}</h3>
 
             <div class="card-body">
             <form method="POST" action="/students/update/{{$user->id}}">

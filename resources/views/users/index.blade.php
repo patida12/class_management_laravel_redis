@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        @if(Auth::user()->isTeacher())
+        @if(Auth::user()->isTeacher() && !$isListTeacher)
         <div style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <form action="/students/create" method="get" style="margin-left: -14px;">
@@ -61,11 +61,13 @@
                                 Edit
                               </button>
                         </a>
+                        @if(Auth::user()->isTeacher() && !$isListTeacher)
                         <a href="/students/delete/{{$user->id}}" method="post">
                           <button onclick="return confirm('Do you want to delete this student?')" class="btn btn-danger btn-sm">
                             Delete
                           </button>
                         </a>
+                        @endif
                         @endif
                       </td>
                     </tr>
