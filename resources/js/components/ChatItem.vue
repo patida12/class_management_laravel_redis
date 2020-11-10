@@ -1,31 +1,44 @@
 <template>
-    <div class="chat-item">
-        <div class="chat-item-container">
-            <span class="message-time">{{ list.created_at }}</span>
-            <span class="user-name">{{ list.user.username }}</span>
-            <span class="message-text">{{ list.message }}</span>
-        </div>
-    </div>
+	<div class="message" :class="{'is-current-user': $root.currentUserLogin.id === message.user.id}">
+		<div class="message-item user-name">
+			{{ message.user.username}}
+		</div>
+		<div class="message-item timestamp">
+			| <span data-toggle="tooltip" data-placement="top" :title="createdAt">{{ createdAt.split(' ')[1] }}</span>:
+		</div>
+		<div class="message-item text-message">
+			{{ message.message }}
+		</div>
+	</div>
 </template>
 
 <script>
-    export default {
-        props: {
-            message: {
-                type: Object
-            }
-        },
-
-        data() {
-            return {
-                list: this.message
-            }
-        }
+	export default {
+        props: ['message'],
+		computed: {
+			createdAt() {
+				const offset = new Date().getTimezoneOffset()
+				const date = new Date(this.message.created_at)
+				date.setMinutes(date.getMinutes() - offset)
+				return date.toLocaleString()
+			}
+		}
     }
 </script>
 
 <style lang="scss" scoped>
-    .current-user {
-        color: red;
-    }
+	.message {
+		display: flex;
+		color: white;
+        font-size: larger;
+		.message-item:not(:last-child) {
+			margin-right: 5px;
+		}
+	}
+	.message:not(:last-child) {
+		padding-bottom: 20px;
+	}
+	.is-current-user {
+		color: palevioletred;
+	}
 </style>

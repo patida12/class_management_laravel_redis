@@ -1,110 +1,199 @@
 <template>
-    <div class="chat-layout">
-        <div class="chat-layout-container">
-            <div class="user-count">
-                <h3>User count: </h3>
-            </div>
-            <div class="title">
+	<div>
+        <div class="chat">
+            <div class="chat-title">
                 <h1>Chatroom</h1>
             </div>
-            <div class="list-messages">
-                <div class="message" :v-for="message in list_messages">
-                    <chat-item :message="message"></chat-item>
+            <div class="messages">
+                <div class="messages-content">
+                    <ChatItem v-for="(message, index) in list_messages" :key="index" :message="message"></ChatItem>
                 </div>
             </div>
-            <div class="input-section">
-                <input type="text" v-model="message" class="input-el" placeholder="Enter some mssage..." @keyup.enter="sendMessage">
-                <button @click="sendMessage">Send</button>
+            <div class="message-box">
+                <input type="text" v-model="message" @keyup.enter="sendMessage" class="message-input" placeholder="Type message..."/>
+                <button type="button" class="message-submit" @click="sendMessage">Send</button>
             </div>
         </div>
+        <div class="bg"></div>
     </div>
 </template>
 
 <script>
-    import ChatItem from './ChatItem.vue'
-    export default {
-        components: {
-            ChatItem
-        },
+import ChatItem from './ChatItem.vue'
+export default {
+    components: {
+        ChatItem
+    },
+    data() {
+        return {
+            message: '',
+            list_messages: []
+        }
+    },
+    created () {
+        this.loadMessage()
 
-        data() {
-            return {
-                message: '',
-                list_messages: []
-            }
-        },
-
-        created() {
-            this.loadMessage()
-            Echo.channel('Laravel_chatroom')
-            .listen('MessagePosted', (data) => {
-                console.log(data)
-                //if (data.user.id == this.$root.currentUserLogin.id) {
-                    let message = data.message
-                    message.user = data.user
-                    this.list_messages.push(message)
-                //}
-            })
-        },
-
-        methods: {
-            loadMessage() {
-                this.$store.dispatch('getMessages')
-                .then(res => {
-                    this.list_messages = res.data
-                })
+        Echo.channel('laravel_database_chatroom')
+        .listen('MessagePosted', (data) => {
+            let message = data.message
+            message.user = data.user
+            this.list_messages.push(message)
+        })
+    },
+    methods: {
+        loadMessage() {
+                axios.get('/messages')
+                    .then(response => {
+                        this.list_messages = response.data
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             },
             sendMessage() {
                 axios.post('/messages', {
                         message: this.message
                     })
                     .then(response => {
-                        this.list_messages.push({
-                            message: this.message,
-                            created_at: new Date().toJSON().replace(/T|Z/gi, ''),
-                            user: this.$root.currentUserLogin
-                        })
+                        console.log('success')
+                        this.list_messages.push(response.data.message)
                         this.message = ''
                     })
                     .catch(error => {
                         console.log(error)
                     })
             }
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>
-    .chat-layout {
-        border: solid 1px #ddd;
-        border-radius: 3px;
-        padding: 20px;
-        .chat-layout-container {
-            .user-count {
-                float: right;
-            }
-            .list-messages {
-                .message{
-                    padding: 5px 0;
-                }
-            }
-            .input-section {
-                .input-el {
-                    width: 100%;
-                    filter: hue-rotate(45deg);
-                    font-weight: bold;
-                    background-color: transparent;
-                    border: 0;
-                    border-bottom: 1px solid #404040;
-                    outline: none;
-                    overflow: visible;
-                    font-size: 100%;
-                    line-height: 1.15;
-                    &:focus {
-                        border-bottom: 1px solid #e400ff;
-                    }
-                }
-            }
+.messages {
+    height: 80%;
+    overflow-y: scroll;
+    padding: 0 20px;
+}
+/*--------------------
+Body
+--------------------*/
+.bg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	background: url('https://images.unsplash.com/photo-1451186859696-371d9477be93?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925') no-repeat 0 0;
+	filter: blur(80px);
+	transform: scale(1.2);
+}
+/*--------------------
+Chat
+--------------------*/
+.chat {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 80vh;
+    max-height: 700px;
+    z-index: 2;
+    overflow: hidden;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .2);
+    background: rgba(0, 0, 0, .5);
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+/*--------------------
+Chat Title
+--------------------*/
+.chat-title {
+    flex: 0 1 45px;
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 10px 10px 50px;
+
+    h1, h2 {
+        font-weight: normal;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+    }
+    h2 {
+        color: rgba(255, 255, 255, .5);
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    .avatar {
+        position: absolute;
+        z-index: 1;
+        top: 8px;
+        left: 9px;
+        border-radius: 30px;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        border: 2px solid rgba(255, 255, 255, 0.24);
+        img {
+            width: 100%;
+            height: auto;
         }
     }
+}
+/*--------------------
+Message Box
+--------------------*/
+.message-box {
+    flex: 0 1 40px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    position: relative;
+
+    & .message-input {
+        background: none;
+        border: none;
+        outline: none!important;
+        resize: none;
+        color: rgba(255, 255, 255, .7);
+        font-size: 11px;
+        height: 17px;
+        margin: 0;
+        padding-right: 20px;
+        width: 265px;
+    }
+    textarea:focus:-webkit-placeholder{
+        color: transparent;
+    }
+
+    & .message-submit {
+        position: absolute;
+        z-index: 1;
+        top: 9px;
+        right: 10px;
+        color: #fff;
+        border: none;
+        background: #248A52;
+        font-size: 10px;
+        text-transform: uppercase;
+        line-height: 1;
+        padding: 6px 10px;
+        border-radius: 10px;
+        outline: none!important;
+        transition: background .2s ease;
+        &:hover {
+            background: #1D7745;
+        }
+    }
+}
 </style>

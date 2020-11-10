@@ -1,7 +1,4 @@
-@extends('layouts.master')
-@section('content')
-@endsection
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Chat App</title>
@@ -30,7 +27,7 @@
 <body>
 	<div id="app">
 		<chat-layout></chat-layout>
-	</div>
+    </div>
 	<script src="{{ mix('js/app.js') }}"></script>
 </body>
-</html> --}}
+</html>

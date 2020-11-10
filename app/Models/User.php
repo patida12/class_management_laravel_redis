@@ -41,7 +41,7 @@ class User extends Authenticatable
     }
 
     public function message() {
-        return $this->hasMany('App\Models\Message');
+        return $this->hasMany(Message::class);
     }
 
     public function isTeacher()
@@ -52,5 +52,10 @@ class User extends Authenticatable
     public function getId()
     {
         return $this->id;
+    }
+
+    public function get()
+    {
+        return $this;
     }
 }

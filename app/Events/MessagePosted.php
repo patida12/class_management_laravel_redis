@@ -21,6 +21,9 @@ class MessagePosted
      *
      * @return void
      */
+    public $message;
+    public $user;
+
     public function __construct(Message $message, User $user)
     {
         $this->message = $message;
@@ -34,6 +37,6 @@ class MessagePosted
      */
     public function broadcastOn()
     {
-        return new Channel('chatroom');
+        return ['chatroom'];
     }
 }

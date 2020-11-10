@@ -1918,16 +1918,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    message: {
-      type: Object
+  props: ['message'],
+  computed: {
+    createdAt: function createdAt() {
+      var offset = new Date().getTimezoneOffset();
+      var date = new Date(this.message.created_at);
+      date.setMinutes(date.getMinutes() - offset);
+      return date.toLocaleString();
     }
-  },
-  data: function data() {
-    return {
-      list: this.message
-    };
   }
 });
 
@@ -1963,8 +1966,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1980,22 +1981,21 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loadMessage();
-    Echo.channel('Laravel_chatroom').listen('MessagePosted', function (data) {
-      console.log(data); //if (data.user.id == this.$root.currentUserLogin.id) {
-
+    Echo.channel('laravel_database_chatroom').listen('MessagePosted', function (data) {
       var message = data.message;
       message.user = data.user;
 
-      _this.list_messages.push(message); //}
-
+      _this.list_messages.push(message);
     });
   },
   methods: {
     loadMessage: function loadMessage() {
       var _this2 = this;
 
-      this.$store.dispatch('getMessages').then(function (res) {
-        _this2.list_messages = res.data;
+      axios.get('/messages').then(function (response) {
+        _this2.list_messages = response.data;
+      })["catch"](function (error) {
+        console.log(error);
       });
     },
     sendMessage: function sendMessage() {
@@ -2004,11 +2004,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/messages', {
         message: this.message
       }).then(function (response) {
-        _this3.list_messages.push({
-          message: _this3.message,
-          created_at: new Date().toJSON().replace(/T|Z/gi, ''),
-          user: _this3.$root.currentUserLogin
-        });
+        console.log('success');
+
+        _this3.list_messages.push(response.data.message);
 
         _this3.message = '';
       })["catch"](function (error) {
@@ -8804,7 +8802,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".current-user[data-v-ccaa2314] {\n  color: red;\n}", ""]);
+exports.push([module.i, ".message[data-v-ccaa2314] {\n  display: flex;\n  color: white;\n  font-size: larger;\n}\n.message .message-item[data-v-ccaa2314]:not(:last-child) {\n  margin-right: 5px;\n}\n.message[data-v-ccaa2314]:not(:last-child) {\n  padding-bottom: 20px;\n}\n.is-current-user[data-v-ccaa2314] {\n  color: palevioletred;\n}", ""]);
 
 // exports
 
@@ -8823,7 +8821,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".chat-layout[data-v-927db766] {\n  border: solid 1px #ddd;\n  border-radius: 3px;\n  padding: 20px;\n}\n.chat-layout .chat-layout-container .user-count[data-v-927db766] {\n  float: right;\n}\n.chat-layout .chat-layout-container .list-messages .message[data-v-927db766] {\n  padding: 5px 0;\n}\n.chat-layout .chat-layout-container .input-section .input-el[data-v-927db766] {\n  width: 100%;\n  filter: hue-rotate(45deg);\n  font-weight: bold;\n  background-color: transparent;\n  border: 0;\n  border-bottom: 1px solid #404040;\n  outline: none;\n  overflow: visible;\n  font-size: 100%;\n  line-height: 1.15;\n}\n.chat-layout .chat-layout-container .input-section .input-el[data-v-927db766]:focus {\n  border-bottom: 1px solid #e400ff;\n}", ""]);
+exports.push([module.i, ".messages[data-v-927db766] {\n  height: 80%;\n  overflow-y: scroll;\n  padding: 0 20px;\n}\n\n/*--------------------\nBody\n--------------------*/\n.bg[data-v-927db766] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  background: url(\"https://images.unsplash.com/photo-1451186859696-371d9477be93?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925\") no-repeat 0 0;\n  filter: blur(80px);\n  transform: scale(1.2);\n}\n\n/*--------------------\nChat\n--------------------*/\n.chat[data-v-927db766] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 500px;\n  height: 80vh;\n  max-height: 700px;\n  z-index: 2;\n  overflow: hidden;\n  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);\n  background: rgba(0, 0, 0, 0.5);\n  border-radius: 20px;\n  display: flex;\n  justify-content: space-between;\n  flex-direction: column;\n}\n\n/*--------------------\nChat Title\n--------------------*/\n.chat-title[data-v-927db766] {\n  flex: 0 1 45px;\n  position: relative;\n  z-index: 2;\n  background: rgba(0, 0, 0, 0.2);\n  color: #fff;\n  text-transform: uppercase;\n  text-align: left;\n  padding: 10px 10px 10px 50px;\n}\n.chat-title h1[data-v-927db766], .chat-title h2[data-v-927db766] {\n  font-weight: normal;\n  font-size: 16px;\n  margin: 0;\n  padding: 0;\n}\n.chat-title h2[data-v-927db766] {\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 8px;\n  letter-spacing: 1px;\n}\n.chat-title .avatar[data-v-927db766] {\n  position: absolute;\n  z-index: 1;\n  top: 8px;\n  left: 9px;\n  border-radius: 30px;\n  width: 30px;\n  height: 30px;\n  overflow: hidden;\n  margin: 0;\n  padding: 0;\n  border: 2px solid rgba(255, 255, 255, 0.24);\n}\n.chat-title .avatar img[data-v-927db766] {\n  width: 100%;\n  height: auto;\n}\n\n/*--------------------\nMessage Box\n--------------------*/\n.message-box[data-v-927db766] {\n  flex: 0 1 40px;\n  width: 100%;\n  background: rgba(0, 0, 0, 0.3);\n  padding: 10px;\n  position: relative;\n}\n.message-box .message-input[data-v-927db766] {\n  background: none;\n  border: none;\n  outline: none !important;\n  resize: none;\n  color: rgba(255, 255, 255, 0.7);\n  font-size: 11px;\n  height: 17px;\n  margin: 0;\n  padding-right: 20px;\n  width: 265px;\n}\n.message-box textarea[data-v-927db766]:focus:-webkit-placeholder {\n  color: transparent;\n}\n.message-box .message-submit[data-v-927db766] {\n  position: absolute;\n  z-index: 1;\n  top: 9px;\n  right: 10px;\n  color: #fff;\n  border: none;\n  background: #248A52;\n  font-size: 10px;\n  text-transform: uppercase;\n  line-height: 1;\n  padding: 6px 10px;\n  border-radius: 10px;\n  outline: none !important;\n  transition: background 0.2s ease;\n}\n.message-box .message-submit[data-v-927db766]:hover {\n  background: #1D7745;\n}", ""]);
 
 // exports
 
@@ -46981,21 +46979,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "chat-item" }, [
-    _c("div", { staticClass: "chat-item-container" }, [
-      _c("span", { staticClass: "message-time" }, [
-        _vm._v(_vm._s(_vm.list.created_at))
+  return _c(
+    "div",
+    {
+      staticClass: "message",
+      class: {
+        "is-current-user": _vm.$root.currentUserLogin.id === _vm.message.user.id
+      }
+    },
+    [
+      _c("div", { staticClass: "message-item user-name" }, [
+        _vm._v("\n\t\t" + _vm._s(_vm.message.user.username) + "\n\t")
       ]),
       _vm._v(" "),
-      _c("span", { staticClass: "user-name" }, [
-        _vm._v(_vm._s(_vm.list.user.username))
+      _c("div", { staticClass: "message-item timestamp" }, [
+        _vm._v("\n\t\t| "),
+        _c(
+          "span",
+          {
+            attrs: {
+              "data-toggle": "tooltip",
+              "data-placement": "top",
+              title: _vm.createdAt
+            }
+          },
+          [_vm._v(_vm._s(_vm.createdAt.split(" ")[1]))]
+        ),
+        _vm._v(":\n\t")
       ]),
       _vm._v(" "),
-      _c("span", { staticClass: "message-text" }, [
-        _vm._v(_vm._s(_vm.list.message))
+      _c("div", { staticClass: "message-item text-message" }, [
+        _vm._v("\n\t\t" + _vm._s(_vm.message.message) + "\n\t")
       ])
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47019,25 +47036,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "chat-layout" }, [
-    _c("div", { staticClass: "chat-layout-container" }, [
+  return _c("div", [
+    _c("div", { staticClass: "chat" }, [
       _vm._m(0),
       _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _c("div", { staticClass: "list-messages" }, [
+      _c("div", { staticClass: "messages" }, [
         _c(
           "div",
-          {
-            staticClass: "message",
-            attrs: { "v-for": _vm.message in _vm.list_messages }
-          },
-          [_c("chat-item", { attrs: { message: _vm.message } })],
+          { staticClass: "messages-content" },
+          _vm._l(_vm.list_messages, function(message, index) {
+            return _c("ChatItem", { key: index, attrs: { message: message } })
+          }),
           1
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "input-section" }, [
+      _c("div", { staticClass: "message-box" }, [
         _c("input", {
           directives: [
             {
@@ -47047,8 +47061,8 @@ var render = function() {
               expression: "message"
             }
           ],
-          staticClass: "input-el",
-          attrs: { type: "text", placeholder: "Enter some mssage..." },
+          staticClass: "message-input",
+          attrs: { type: "text", placeholder: "Type message..." },
           domProps: { value: _vm.message },
           on: {
             keyup: function($event) {
@@ -47069,9 +47083,19 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("button", { on: { click: _vm.sendMessage } }, [_vm._v("Send")])
+        _c(
+          "button",
+          {
+            staticClass: "message-submit",
+            attrs: { type: "button" },
+            on: { click: _vm.sendMessage }
+          },
+          [_vm._v("Send")]
+        )
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "bg" })
   ])
 }
 var staticRenderFns = [
@@ -47079,15 +47103,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "user-count" }, [
-      _c("h3", [_vm._v("User count: ")])
+    return _c("div", { staticClass: "chat-title" }, [
+      _c("h1", [_vm._v("Chatroom")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "title" }, [_c("h1", [_vm._v("Chatroom")])])
   }
 ]
 render._withStripped = true
@@ -60609,9 +60627,8 @@ module.exports = yeast;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _store_store_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store.js */ "./resources/js/store/store.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -60633,7 +60650,7 @@ Vue.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-Vue.component('chat-layout', __webpack_require__(/*! ./components/ChatLayout.vue */ "./resources/js/components/ChatLayout.vue")["default"]);
+Vue.component('chat-layout', __webpack_require__(/*! ./components/ChatLayout.vue */ "./resources/js/components/ChatLayout.vue")["default"]); // import { store } from './store/store.js';
 
 
 /**
@@ -60643,22 +60660,22 @@ Vue.component('chat-layout', __webpack_require__(/*! ./components/ChatLayout.vue
  */
 
 var app = new Vue({
-  el: '#app' // data: {
-  //     currentUserLogin: {}
-  // },
-  // store: store,
-  // created() {
-  //     this.getCurrentUserLogin()
-  // },
-  // methods: {
-  //     getCurrentUserLogin() {
-  //         axios.get('/current-user')
-  //         .then(response => {
-  //             this.currentUserLogin = response.data
-  //         })
-  //     }
-  // },
+  el: '#app',
+  data: {
+    currentUserLogin: {}
+  },
+  created: function created() {
+    this.getCurrentUserLogin();
+  },
+  methods: {
+    getCurrentUserLogin: function getCurrentUserLogin() {
+      var _this = this;
 
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/getUserLogin').then(function (response) {
+        _this.currentUserLogin = response.data;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -60881,43 +60898,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChatLayout_vue_vue_type_template_id_927db766_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/store/store.js":
-/*!*************************************!*\
-  !*** ./resources/js/store/store.js ***!
-  \*************************************/
-/*! exports provided: store */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  states: {},
-  mutations: {},
-  actions: {
-    getMessages: function getMessages() {
-      var start_time = new Date().getTime();
-      var a = axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/messages').then(function (res) {
-        var request_time = new Date().getTime() - start_time;
-        console.log(request_time);
-        return res;
-      });
-      return a;
-    }
-  }
-});
 
 /***/ }),
 

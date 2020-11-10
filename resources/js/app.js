@@ -24,7 +24,7 @@ Vue.use(Vuex)
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chat-layout', require('./components/ChatLayout.vue').default);
-import { store } from './store/store.js';
+// import { store } from './store/store.js';
 import axios from 'axios';
 
 /**
@@ -35,19 +35,18 @@ import axios from 'axios';
 
 const app = new Vue({
     el: '#app',
-    // data: {
-    //     currentUserLogin: {}
-    // },
-    // store: store,
-    // created() {
-    //     this.getCurrentUserLogin()
-    // },
-    // methods: {
-    //     getCurrentUserLogin() {
-    //         axios.get('/current-user')
-    //         .then(response => {
-    //             this.currentUserLogin = response.data
-    //         })
-    //     }
-    // },
+    data: {
+        currentUserLogin: {}
+    },
+    created() {
+        this.getCurrentUserLogin()
+    },
+    methods: {
+        getCurrentUserLogin() {
+            axios.get('/getUserLogin')
+            .then(response => {
+                this.currentUserLogin = response.data
+            })
+        }
+    }
 });
