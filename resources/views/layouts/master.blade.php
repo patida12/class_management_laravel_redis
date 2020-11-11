@@ -27,7 +27,7 @@
                 <a class="nav-link active" href="/home"><i class="fa fa-home"> Home</i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/chat"><i class="fa fa-home"> ChatRoom</i></a>
+                <a class="nav-link" href="/chat"><i class="fa fa-comments"> ChatRoom</i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/assignment"><i class="fa fa-book"> Assignment</i></a>

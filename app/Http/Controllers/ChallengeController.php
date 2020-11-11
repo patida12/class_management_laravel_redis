@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Challenge;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ChallengeController extends Controller
@@ -22,7 +23,9 @@ class ChallengeController extends Controller
      */
     public function index()
     {
-        $challenges = Challenge::all();
+        $challenges = Cache::remember('challenges', Controller::SECONDS, function () {
+            return Challenge::all();
+        });
         return view(
             'challenge.index',
             ['challenges' => $challenges]
@@ -111,7 +114,9 @@ class ChallengeController extends Controller
      */
     public function destroy($id)
     {
-        $challenge = Challenge::find($id);
+        $challenge = Cache::remember("challenge:$id", Controller::SECONDS, function () use($id) {
+            return Challenge::find($id);
+        });
         $idChallenge = (string)$id;
         $files = Storage::files(ChallengeController::CHALLENGE_DIR);
         foreach($files as $filePath) {

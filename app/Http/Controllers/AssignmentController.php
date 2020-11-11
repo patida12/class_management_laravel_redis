@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class AssignmentController extends Controller
@@ -20,11 +21,27 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignments = Assignment::all();
+        $assignments = Cache::remember('assignments', Controller::SECONDS, function () {
+            return Assignment::all();
+        });
         return view(
             'assignment.index',
             ['assignments' => $assignments]
         );
+    }
+
+    /**
+     * Display by id.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public static function getById($id)
+    {
+        $assignment = Cache::remember("assignment:$id", Controller::SECONDS, function () use($id) {
+            return Assignment::find($id);
+        });
+        return $assignment;
     }
 
     /**
@@ -77,7 +94,7 @@ class AssignmentController extends Controller
      */
     public function download($id)
     {
-        $assignment = Assignment::find($id);
+        $assignment = AssignmentController::getById($id);
 
         $index = strripos($assignment->path,"/");
         $name = substr($assignment->path, $index + 1);
@@ -93,7 +110,7 @@ class AssignmentController extends Controller
      */
     public function destroy($id)
     {
-        $assignment = Assignment::find($id);
+        $assignment = AssignmentController::getById($id);
         Storage::delete($assignment->path);
         $assignment->delete();
         return redirect()->action([AssignmentController::class, 'index'])->with('success_delete', 'Delete thành công!');

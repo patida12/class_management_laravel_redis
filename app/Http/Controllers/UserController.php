@@ -6,8 +6,10 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -22,7 +24,9 @@ class UserController extends Controller
      */
     public function getAllStudents()
     {
-        $users = User::where('permission', 0)->get();
+        $users = Cache::remember('students', Controller::SECONDS, function () {
+            return User::where('permission', 0)->get();
+        });
         return view(
             'users.index',
             ['users' => $users, 'isListTeacher' => false]
@@ -36,7 +40,9 @@ class UserController extends Controller
      */
     public function getAllTeachers()
     {
-        $users = User::where('permission', 1)->get();
+        $users = Cache::remember('teachers', Controller::SECONDS, function() {
+            return User::where('permission', 1)->get();
+        });
         return view(
             'users.index',
             ['users' => $users, 'isListTeacher' => true]
@@ -92,6 +98,20 @@ class UserController extends Controller
     }
 
     /**
+     * Display the user by id.
+     *
+     * @param int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public static function getById($id)
+    {
+        $user = Cache::remember("user:$id", Controller::SECONDS, function () use ($id) {
+            return User::find($id);
+        });
+        return $user;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -100,8 +120,8 @@ class UserController extends Controller
     public function getProfile()
     {
         $id = Auth::user()->id;
-        $user = User::find($id);
 
+        $user = UserController::getById($id);
         return view(
             'users.profile',
             ['user' => $user]
@@ -116,7 +136,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = UserController::getById($id);
         return view(
             'users.show',
             ['user' => $user]
@@ -131,7 +151,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = UserController::getById($id);
         return view(
             'users.edit',
             ['user' => $user]
@@ -147,7 +167,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = UserController::getById($id);
         $username = $request->username;
         $email = $request->email;
         $phonenumber = $request->phonenumber;
@@ -201,7 +221,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $id = Auth::user()->id;
-        $user = User::find($id);
+        $user = UserController::getById($id);
         $email = $request->email;
         $phonenumber = $request->phonenumber;
 
@@ -237,7 +257,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $user = UserController::getById($id);
         $user->delete();
 
         return redirect()->action([UserController::class, 'getAllStudents'])->with('success_delete', 'Delete thành công!');

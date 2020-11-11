@@ -12,11 +12,6 @@
                         <h2 class="pt-sm-2 pb-1 mb-0 text-nowrap">
                             {{$user->fullname}}
                         </h2>
-                        <div class="mt-2">
-                        <a href="/messagebox/{{Auth::user()->id}}/{{$user->id}}">
-                            <button type="submit" class="btn btn-primary">Send message</button>
-                        </a>
-                        </div>
                     </div>
                 </div>
             </div>

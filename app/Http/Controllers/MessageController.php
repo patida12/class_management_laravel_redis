@@ -7,14 +7,21 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 class MessageController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $message = Message::with('user')->latest()->paginate(50);;
+        $message = Cache::remember('messages', Controller::SECONDS, function () {
+            return Message::with('user')->latest()->paginate(50);
+        });
         return $message;
     }
 

@@ -35,6 +35,7 @@ Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/users/show/{id}', [UserController::class, 'show']);
 Route::get('/users/profile', [UserController::class, 'getProfile']);
 Route::post('/users/updateProfile', [UserController::class, 'updateProfile']);
+Route::get('/users/test', [UserController::class, 'test']);
 
 Route::get('/students', [UserController::class, 'getAllStudents']);
 Route::get('/students/create', [UserController::class, 'create']);
@@ -74,6 +75,6 @@ Route::get('/messagebox/delete/{id}', [MessageController::class, 'destroy']);
 Route::get('/getUserLogin', function() {
 	return Auth::user();
 });
-Route::view('/chat', 'chat');
+Route::view('/chat', 'chat')->middleware('auth');;
 Route::get('/messages', [MessageController::class, 'index']);
 Route::post('/messages', [MessageController::class, 'store']);

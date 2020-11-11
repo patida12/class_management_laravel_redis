@@ -7,6 +7,7 @@ use App\Models\Submission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class SubmissionController extends Controller
@@ -23,7 +24,7 @@ class SubmissionController extends Controller
      */
     public function index($id)
     {
-        $assignment = Assignment::find($id);
+        $assignment = AssignmentController::getById($id);
         return view(
             'submission.index',
             ['assignment' => $assignment]
@@ -92,7 +93,9 @@ class SubmissionController extends Controller
      */
     public function download($id)
     {
-        $submission = Submission::find($id);
+        $submission = Cache::remember("submission:$id", Controller::SECONDS, function () use($id) {
+            return Submission::find($id);
+        });
         $index = strripos($submission->path,"/");
         $fileName = substr($submission->path, $index + 1);
         $index = strripos($fileName,"_");
@@ -101,17 +104,4 @@ class SubmissionController extends Controller
         return Storage::download($submission->path, $name);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function destroy($id)
-    // {
-    //     $submission = Submission::find($id);
-    //     Storage::delete($submission->path);
-    //     $submission->delete();
-    //     return redirect()->action([SubmissionController::class, 'index'])->with('success_delete', 'Delete thành công!');
-    // }
 }
