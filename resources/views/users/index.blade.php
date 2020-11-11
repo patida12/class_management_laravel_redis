@@ -32,6 +32,7 @@
             </div>
         </div>
         @endif
+        @if(!$isListTeacher)
         <div>
         <form method="POST" action="/students">
             @csrf
@@ -66,6 +67,7 @@
             </form>
         </div>
         <br>
+        @endif
 
         <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table id="table" class="table table-hover table-bordered table-striped table-inverse table-wrapper-scroll-y" cellspacing="0">
