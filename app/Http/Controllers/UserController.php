@@ -81,6 +81,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phonenumber = $request->phonenumber;
         $user->save();
+        Cache::forget('students');
 
         return redirect()->action([UserController::class, 'getAllStudents'])->with('success_add', 'Add thành công!');
     }
@@ -201,6 +202,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->fullname = $request->fullname;
         $user->save();
+        Cache::forget("user:$id");
 
         if ($user->permission != 0) {
             $url = 'getAllTeachers';
@@ -245,6 +247,7 @@ class UserController extends Controller
         $user->phonenumber = $request->phonenumber;
         $user->password = Hash::make($request->password);
         $user->save();
+        Cache::forget("user:$id");
 
         return redirect()->action([UserController::class, 'getProfile'])->with('success', 'Update thành công!');
     }
@@ -259,6 +262,7 @@ class UserController extends Controller
     {
         $user = UserController::getById($id);
         $user->delete();
+        Cache::forget("user:$id");
 
         return redirect()->action([UserController::class, 'getAllStudents'])->with('success_delete', 'Delete thành công!');
     }

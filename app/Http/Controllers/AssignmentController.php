@@ -72,6 +72,7 @@ class AssignmentController extends Controller
         $assignment->path = $filePath;
         if(!Storage::exists($filePath)) {
             $assignment->save();
+            Cache::forget("assignments");
             $path = Storage::putFileAs('public/assignment', $file, $assignment->name);
 
             if ($path) {
@@ -113,6 +114,7 @@ class AssignmentController extends Controller
         $assignment = AssignmentController::getById($id);
         Storage::delete($assignment->path);
         $assignment->delete();
+        Cache::forget("assignment:$id");
         return redirect()->action([AssignmentController::class, 'index'])->with('success_delete', 'Delete thành công!');
     }
 }

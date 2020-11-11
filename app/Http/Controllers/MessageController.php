@@ -6,6 +6,7 @@ use App\Events\MessagePosted;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,7 @@ class MessageController extends Controller
 
     public function index()
     {
-        $message = Cache::remember('messages', Controller::SECONDS, function () {
-            return Message::with('user')->latest()->paginate(50);
-        });
+        $message = Message::with('user')->latest()->paginate(50);
         return $message;
     }
 

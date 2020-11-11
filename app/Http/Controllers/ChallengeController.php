@@ -59,6 +59,7 @@ class ChallengeController extends Controller
         $challenge->description = $request->description;
         $name = $file->getClientOriginalName();
         $challenge->save();
+        Cache::forget("challenges");
         $idChallenge = (string)$challenge->id;
 
         $path = Storage::putFileAs(ChallengeController::CHALLENGE_DIR, $request->file('uploaded_file'), $idChallenge . '_' . $name);
@@ -132,6 +133,7 @@ class ChallengeController extends Controller
         }
 
         $challenge->delete();
+        Cache::forget("challenge:$id");
         return redirect()->action([ChallengeController::class, 'index'])->with('success_delete', 'Delete thành công!');
     }
 }
