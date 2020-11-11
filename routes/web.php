@@ -38,6 +38,7 @@ Route::post('/users/updateProfile', [UserController::class, 'updateProfile']);
 Route::get('/users/test', [UserController::class, 'test']);
 
 Route::get('/students', [UserController::class, 'getAllStudents']);
+Route::post('/students', [UserController::class, 'getStudents']);
 Route::get('/students/create', [UserController::class, 'create']);
 Route::post('/students/store', [UserController::class, 'store']);
 Route::get('/students/edit/{id}', [UserController::class, 'edit']);

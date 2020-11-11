@@ -24,12 +24,47 @@ class UserController extends Controller
      */
     public function getAllStudents()
     {
-        $users = Cache::remember('students', Controller::SECONDS, function () {
-            return User::where('permission', 0)->get();
-        });
+        $users = User::where('permission', 0)->paginate(10);
         return view(
             'users.index',
-            ['users' => $users, 'isListTeacher' => false]
+            ['users' => $users, 'isListTeacher' => false, 'isSearching' => false]
+        );
+        // $ho = ["Phạm", "Nguyễn", "Trần", "Lại", "Đinh", "Triệu", "Ngô", "Nghiêm"];
+        // $dem = ["Văn", "Thị", "Tuấn", "Anh", "Việt"];
+        // $ten = ["Anh", "Quỳnh", "Hoài", "Uyên", "Lan", "Linh", "Bằng", "Biển", "Đạt","Đức", "Dũng", "Duy"];
+        // for ($i = 1; $i < 100; $i++) {
+        //     $user = new User();
+        //     $user->username = "hocsinh" . $i;
+        //     $user->password = Hash::make("12345678");
+        //     $user->fullname = $ho[random_int(0, 7)] . " " . $dem[random_int(0, 4)] . " " . $ten[random_int(0, 11)];
+        //     $user->email = $user->username . "@gmail.com";
+        //     $user->phonenumber = random_int(0, 9) . random_int(0, 9) . random_int(0, 9) . random_int(0, 9). random_int(0, 9) . random_int(0, 9).random_int(0, 9) . random_int(0, 9);
+        //     $user->save();
+        // }
+    }
+
+    /**
+     * Display a list students.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getStudents(Request $request)
+    {
+        $this->validate($request, [
+            'keyword' => ['required', 'string', 'max:20'],
+            'searchBy' => ['required'],
+        ]);
+        $keyword = $request->keyword;
+        $searchBy = $request->searchBy;
+        $index = $searchBy . $keyword;
+        $users = Cache::remember("students:$index", Controller::SECONDS, function () use($searchBy, $keyword){
+            return DB::select("SELECT * FROM users WHERE MATCH($searchBy) AGAINST('$keyword')");
+        });
+
+        return view(
+            'users.index',
+            ['users' => $users, 'isListTeacher' => false, 'isSearching' => true]
         );
     }
 
@@ -45,7 +80,7 @@ class UserController extends Controller
         });
         return view(
             'users.index',
-            ['users' => $users, 'isListTeacher' => true]
+            ['users' => $users, 'isListTeacher' => true, 'isSearching' => false]
         );
     }
 
@@ -81,7 +116,6 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phonenumber = $request->phonenumber;
         $user->save();
-        Cache::forget('students');
 
         return redirect()->action([UserController::class, 'getAllStudents'])->with('success_add', 'Add thành công!');
     }

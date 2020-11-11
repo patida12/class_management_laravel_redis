@@ -24,25 +24,25 @@
     <section style="margin-top: 30px;">
         <ul id="ul_index" class="nav flex-column" >
             <li class="nav-item">
-                <a class="nav-link active" href="/home"><i class="fa fa-home"> Home</i></a>
+                <a class="nav-link {{ Request::is('home') ? 'active' : '' }}" href="{{ url('home') }}"><i class="fa fa-home"> Home</i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/chat"><i class="fa fa-comments"> ChatRoom</i></a>
+                <a class="nav-link{{ Request::is('chat') ? 'active' : '' }}" href="{{ url('chat') }}"><i class="fa fa-comments"> ChatRoom</i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/assignment"><i class="fa fa-book"> Assignment</i></a>
+                <a class="nav-link {{ Request::is('assignment') ? 'active' : '' }}" href="{{ url('assignment') }}"><i class="fa fa-book"> Assignment</i></a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="/teachers"><i class="fa fa-user"> Teachers</i></a>
+                <a class="nav-link {{ Request::is('teachers') ? 'active' : '' }}" href="{{ url('teachers') }}"><i class="fa fa-user"> Teachers</i></a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="/students"><i class="fa fa-users"> Students</i></a>
+                <a class="nav-link {{ Request::is('students') ? 'active' : '' }}" href="{{ url('students') }}"><i class="fa fa-users"> Students</i></a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="/challenges"><i class="fa fa-gamepad"> Challenge</i></a>
+                <a class="nav-link {{ Request::is('challenges') ? 'active' : '' }}" href="{{ url('challenges') }}"><i class="fa fa-gamepad"> Challenge</i></a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="/users/profile"><i class="fa fa-user-circle"> Profile</i></a>
+                <a class="nav-link {{ Request::is('users/profile') ? 'active' : '' }}" href="{{ url('users/profile') }}"><i class="fa fa-user-circle"> Profile</i></a>
             </li>
         </ul>
     </section>
