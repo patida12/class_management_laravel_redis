@@ -1,3 +1,23 @@
+## About Project
+
+- Class Management is a classroom management website that:
+    - allows teachers to add / edit / delete student records, assign exercises, create challenges
+    - allows students to view assignments, submit assignments, and answer challenges
+    - allows people chat realtime in a channel
+- Project using these technologies:
+    - Front-end: HTML, CSS, JavaScript, Bootstrap 4, VueJS 
+
+    - Back-end: Laravel, socket.io
+
+    - DBMS: MySQL  
+
+    - Cache Driver: Redis 
+
+- Compiles:
+    - php artisan serve
+    - npx laravel-echo-server start
+    - php artisan queue:work
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
